@@ -1,0 +1,72 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://stemlab.example/schemas/environment.schema.json",
+  "title": "STEMLab uniform environment profile v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "id", "category", "gravity_m_s2", "properties"],
+  "properties": {
+    "schema_version": {"type": "integer", "const": 1},
+    "id": {"type": "string", "pattern": "\\S"},
+    "category": {"type": "string", "pattern": "^[a-z][a-z0-9_.-]*$"},
+    "gravity_m_s2": {
+      "description": "Uniform gravity [gx, gy, gz] in m/s^2; right-handed world frame, z up",
+      "type": "array", "minItems": 3, "maxItems": 3, "items": {"type": "number"}
+    },
+    "properties": {
+      "type": "object",
+      "propertyNames": {"minLength": 1},
+      "additionalProperties": {"type": "number"},
+      "properties": {
+        "fluid_density_kg_m3": {"type": "number", "exclusiveMinimum": 0},
+        "temperature_K": {"type": "number", "exclusiveMinimum": 0},
+        "friction_coefficient": {"type": "number", "minimum": 0}
+      }
+    }
+  },
+  "allOf": [
+    {
+      "if": {"properties": {"category": {"const": "land"}}},
+      "then": {"properties": {"properties": {"$ref": "#/$defs/land"}}}
+    },
+    {
+      "if": {"properties": {"category": {"const": "marine"}}},
+      "then": {"properties": {"properties": {"$ref": "#/$defs/marine"}}}
+    },
+    {
+      "if": {"properties": {"category": {"const": "air"}}},
+      "then": {"properties": {"properties": {"$ref": "#/$defs/air"}}}
+    }
+  ],
+  "$defs": {
+    "land": {
+      "type": "object", "additionalProperties": false,
+      "required": ["friction_coefficient", "terrain_height_m"],
+      "properties": {
+        "friction_coefficient": {"type": "number", "minimum": 0},
+        "terrain_height_m": {"type": "number"}
+      }
+    },
+    "marine": {
+      "type": "object", "additionalProperties": false,
+      "required": ["fluid_density_kg_m3", "current_x_m_s", "current_y_m_s", "current_z_m_s"],
+      "properties": {
+        "fluid_density_kg_m3": {"type": "number", "exclusiveMinimum": 0},
+        "current_x_m_s": {"type": "number"},
+        "current_y_m_s": {"type": "number"},
+        "current_z_m_s": {"type": "number"}
+      }
+    },
+    "air": {
+      "type": "object", "additionalProperties": false,
+      "required": ["fluid_density_kg_m3", "temperature_K", "wind_x_m_s", "wind_y_m_s", "wind_z_m_s"],
+      "properties": {
+        "fluid_density_kg_m3": {"type": "number", "exclusiveMinimum": 0},
+        "temperature_K": {"type": "number", "exclusiveMinimum": 0},
+        "wind_x_m_s": {"type": "number"},
+        "wind_y_m_s": {"type": "number"},
+        "wind_z_m_s": {"type": "number"}
+      }
+    }
+  }
+}

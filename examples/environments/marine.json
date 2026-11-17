@@ -1,0 +1,12 @@
+{
+  "schema_version": 1,
+  "id": "uniform-marine-reference",
+  "category": "marine",
+  "gravity_m_s2": [0.0, 0.0, -9.80665],
+  "properties": {
+    "fluid_density_kg_m3": 1025.0,
+    "current_x_m_s": 0.2,
+    "current_y_m_s": 0.0,
+    "current_z_m_s": 0.0
+  }
+}

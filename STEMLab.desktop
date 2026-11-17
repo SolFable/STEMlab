@@ -1,0 +1,10 @@
+[Desktop Entry]
+Type=Application
+Name=STEMLab
+Comment=Laboratorium komputasi STEM — eksperimen, grafik, dan analisis
+Exec=/home/dzaki/Developer/stemlab/stemlab
+Path=/home/dzaki/Developer/stemlab
+Icon=/home/dzaki/Developer/stemlab/src/stemlab/desktop/icon.svg
+Terminal=false
+Categories=Science;
+StartupNotify=true

@@ -1,0 +1,42 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://stemlab.example/schemas/experiment.schema.json",
+  "title": "STEMLab Phase 0 experiment v1",
+  "description": "Runtime additionally rejects nonfinite numbers, duplicate keys, underflowing half steps, and nonfinite final time.",
+  "type": "object", "additionalProperties": false,
+  "required": ["schema_version", "id", "environment", "model", "solver"],
+  "properties": {
+    "schema_version": {"type": "integer", "const": 1},
+    "id": {"type": "string", "pattern": "\\S"},
+    "environment": {"$ref": "environment.schema.json"},
+    "model": {
+      "type": "object", "additionalProperties": false,
+      "required": ["id", "version", "axis", "parameters", "initial_state"],
+      "properties": {
+        "id": {"const": "constant_acceleration_1d"},
+        "version": {"const": "1"},
+        "axis": {"enum": ["x", "y", "z"]},
+        "parameters": {
+          "type": "object", "additionalProperties": false,
+          "required": ["applied_acceleration_m_s2"],
+          "properties": {"applied_acceleration_m_s2": {"type": "number"}}
+        },
+        "initial_state": {
+          "type": "object", "additionalProperties": false,
+          "required": ["position_m", "velocity_m_s"],
+          "properties": {"position_m": {"type": "number"}, "velocity_m_s": {"type": "number"}}
+        }
+      }
+    },
+    "solver": {
+      "type": "object", "additionalProperties": false,
+      "required": ["id", "version", "dt_s", "steps"],
+      "properties": {
+        "id": {"const": "python_rk4"},
+        "version": {"const": "1"},
+        "dt_s": {"type": "number", "exclusiveMinimum": 0},
+        "steps": {"type": "integer", "minimum": 1, "maximum": 100000}
+      }
+    }
+  }
+}
